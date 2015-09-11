@@ -1,0 +1,14 @@
+*~
+a.out
+fort.*
+data/
+*.mod
+*.o
+testout.sac
+test_sacio_newhead
+test_sacio_newhead_out.sac
+test_sacio_nullhead
+test_sacio_readhead
+test_sacio_readsac
+test_sacio_readsac_cut
+test_sacio_writesac
