@@ -11,6 +11,8 @@ SAC I/O subroutines in the module:
 5. `sacio_nullhead`: Change a SAC header to undefined
 6. `sacio_newhead`: Create a ready-to-use SAC header for evenly-spaced SAC data
 
+To contact me: wangliang0222@foxmail.com
+
 ## How To Get
 
 ### Method 1
