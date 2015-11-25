@@ -17,9 +17,14 @@ To contact me: wangliang0222@foxmail.com
 
 ### Method 1
 
-Click "Download ZIP" button at the right side of the webpage.
+Click "Download ZIP" button on the webpage.
 
 ### Method 2
+
+Download it with the address directly:
+https://codeload.github.com/PeterPanwl/sacio_Fortran/zip/master
+
+### Method 3
 
 Use git:
 
