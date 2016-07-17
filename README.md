@@ -22,14 +22,14 @@ Click "Download ZIP" button on the webpage.
 ### Method 2
 
 Download it with the address directly:
-https://codeload.github.com/PeterPanwl/sacio_Fortran/zip/master
+https://codeload.github.com/wangliang1989/sacio_Fortran/zip/master
 
 ### Method 3
 
 Use git:
 
 ~~~bash
-$ git clone https://github.com/PeterPanwl/sacio_Fortran.git
+$ git clone https://github.com/wangliang1989/sacio_Fortran.git
 ~~~
 
 ## FileList
