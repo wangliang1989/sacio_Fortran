@@ -35,11 +35,11 @@ $ git clone https://github.com/wangliang1989/sacio_Fortran.git
 ## FileList
 
 1. `sacio.f90`: source code of `sacio` module (THIS IS WHAT YOU REALLY NEED!)
-2. examples: `test_sacio_*.f90` show the usage of subroutines provided by `sacio` module
+2. examples: `test/test_sacio_*.f90` show the usage of subroutines provided by `sacio` module
 3. `Makefile`: makefile showing how to compile and link
 4. `README.md`: this file
 5. `.log.md`: the log file
-6. example data: `testin.sac`: SAC file in binary format
+6. example data: `test/testin.sac`: SAC file in binary format
 
 ## How to use
 
