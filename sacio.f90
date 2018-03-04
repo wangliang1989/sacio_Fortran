@@ -108,7 +108,7 @@ open(unit=50, file=filename, status='old', action='read', iostat=flag, &
     & access='stream', form='unformatted', convert='little_endian')
 if (flag /= 0) then
     flag = 1
-    write(0, *) "Unable to open file ", filename
+    write(*, *) "Unable to open file ", filename
     close(unit=50)
     return
 end if
@@ -116,7 +116,7 @@ end if
 read(50, iostat=flag) head
 if (flag /= 0) then
     flag = 2
-    write(0, *) "Error in reading SAC header ", filename
+    write(*, *) "Error in reading SAC header ", filename
     close(unit=50)
     return
 end if
@@ -128,7 +128,7 @@ if ((head%nvhdr>6) .or. (head%nvhdr<0)) then
     read(50, iostat=flag) head
     if ((head%nvhdr>6) .or. (head%nvhdr<0)) then
         flag = 6
-        write(0, *) filename, " not in sac format ", head%nvhdr
+        write(*, *) filename, " not in sac format ", head%nvhdr
         close(unit=50)
         return
     endif
@@ -158,7 +158,7 @@ open(unit=50, file=filename, status='old', action='read', iostat=flag, &
         & access='stream', form='unformatted', convert='little_endian')
 if (flag /= 0) then
     flag = 1
-    write(0, *) "Unable to open file ", filename
+    write(*, *) "Unable to open file ", filename
     close(unit=50)
     return
 end if
@@ -166,7 +166,7 @@ end if
 read(50, iostat=flag) head
 if (flag /= 0) then
     flag = 2
-    write(0, *) "Error in reading SAC header ", filename
+    write(*, *) "Error in reading SAC header ", filename
     close(unit=50)
     return
 end if
@@ -178,7 +178,7 @@ if ((head%nvhdr>6) .or. (head%nvhdr<0))then
     read(50, iostat=flag) head
     if ((head%nvhdr>6) .or. (head%nvhdr<0)) then
         flag = 6
-        write(0, *) filename, " not in sac format ", head%nvhdr
+        write(*, *) filename, " not in sac format ", head%nvhdr
         close(unit=50)
         return
     endif
@@ -187,14 +187,14 @@ end if
 allocate(data(1:head%npts), stat=flag)
 if (flag /= 0)then
     flag = 3
-    write(0, *) "Not enough memory for ", filename
+    write(*, *) "Not enough memory for ", filename
     return
 end if
 
 read(50, iostat=flag) data
 if (flag /= 0) then
    flag = 4
-   write(0, *) "Error in reading SAC data", filename
+   write(*, *) "Error in reading SAC data", filename
    return
 end if
 close(unit=50)
@@ -222,7 +222,7 @@ open(unit=50, file=filename, status='replace', action='write', &
     & iostat=flag, access='stream', form='unformatted')
 if (flag /= 0) then
     flag = 1
-    write(0, *) "Unable to open file ", filename
+    write(*, *) "Unable to open file ", filename
     close(unit=50)
     return
 end if
@@ -230,7 +230,7 @@ end if
 write(50, iostat=flag) head
 if (flag /= 0) then
     flag = 5
-    write(0, *) "Error in writing SAC file ", filename
+    write(*, *) "Error in writing SAC file ", filename
     close(unit=50)
     return
 end if
@@ -238,7 +238,7 @@ end if
 write(50, iostat=flag) data
 if (flag /= 0) then
    flag = 5
-   write(0, *) "Error in writing SAC file ", filename
+   write(*, *) "Error in writing SAC file ", filename
    close(unit=50)
    return
 end if
@@ -279,7 +279,7 @@ open(unit=50, file=filename, status='old', action='read', iostat=flag, &
         & access='stream', form='unformatted', convert='little_endian')
 if (flag /= 0) then
     flag = 1
-    write(0, *) "Unable to open file ", filename
+    write(*, *) "Unable to open file ", filename
     close(unit=50)
     return
 endif
@@ -287,7 +287,7 @@ endif
 read(50, iostat=flag) head
 if (flag /= 0) then
     flag = 2
-    write(0, *) "Error in reading SAC header ", filename
+    write(*, *) "Error in reading SAC header ", filename
     close(unit=50)
     return
 endif
@@ -299,7 +299,7 @@ if ((head%nvhdr>6) .or. (head%nvhdr<0))then
     read(50, iostat=flag) head
     if ((head%nvhdr>6) .or. (head%nvhdr<0)) then
         flag = 6
-        write(0, *) filename, " not in sac format ", head%nvhdr
+        write(*, *) filename, " not in sac format ", head%nvhdr
         close(unit=50)
         return
     endif
@@ -334,14 +334,14 @@ select case(tmark)
         tref = head%t9
     case default
         flag = 7
-        write(0, *) "illegal time mark ", tmark
+        write(*, *) "illegal time mark ", tmark
         close(unit=50)
         return
 end select
 
 if (tref == -12345.) then
     flag = 8
-    write(0, *) "Time mark undefined in ", filename
+    write(*, *) "Time mark undefined in ", filename
     close(unit=50)
     return
 end if
@@ -361,7 +361,7 @@ head%e = t1 + tref
 allocate(data(1:head%npts), stat=flag)
 if (flag /= 0) then
     flag = 3
-    write(0, *) "Not enough memory for ", filename
+    write(*, *) "Not enough memory for ", filename
     close(unit=50)
     return
 end if
@@ -369,7 +369,7 @@ end if
 read(50, rec=632+n0*4+1, iostat=flag) data
 if (flag /= 0 ) then
     flag = 4
-    write(0, *) "Error in reading SAC data", filename
+    write(*, *) "Error in reading SAC data", filename
     close(unit=50)
     return
 end if
