@@ -5,28 +5,27 @@ public :: isum
 
 contains
 
-subroutine sub_crossnorm(filex, filey, filez)
+subroutine sub_crossnorm(x_in, y_in, z, result, flag)
 
     implicit none
-    character(len=80), intent(in) :: filex, filey, filez
-    integer :: i, flagx, flagy, flagz, npts, nx, ny
-    real,allocatable,dimension(:) :: datax, datay, dataz, x, y, x2, y2, z
-    type(sachead) :: headx, heady, headz
+    real, allocatable, dimension(:), intent(in) :: x_in, y_in, z
+    real, allocatable, dimension(:), intent(out) :: result
+    integer, intent(inout) :: flag
+    integer :: i, npts, nx, ny
+    real,allocatable,dimension(:) :: x, y, x2, y2
 
-    call sacio_readsac(filex, headx, datax, flagx)
-    call sacio_readsac(filey, heady, datay, flagy)
-    call sacio_readsac(filez, headz, dataz, flagz)
-    nx = headx%npts
-    ny = heady%npts
-    npts = headx%npts + heady%npts - 1
-    allocate(z(1:npts))
-    allocate(x(1:npts))
-    allocate(y(1:npts))
-    x = datax * datax
-    y = datay * datay
-    z = dataz
+    nx = size(x_in)
+    ny = size(y_in)
+    npts = nx + ny - 1
+    if (npts /= size(z)) then
+        flag = 1
+        result = 0
+    end if
+    x = x_in * x_in
+    y = y_in * y_in
     allocate(x2(1:npts))
     allocate(y2(1:npts))
+    allocate(result(1:npts))
     !$OMP PARALLEL DO
     do i=1, npts
         if ((i >= 1) .and. (i <= ny)) then
@@ -40,11 +39,10 @@ subroutine sub_crossnorm(filex, filey, filez)
             y2(i) = isum(y,1,nx+ny-i)
         end if
         if ((abs(x2(i)) > 1e-10) .and. (abs(y2(i)) > 1e-10)) then
-            z(i) = z(i) / sqrt (x2(i) * y2(i))
+            result(i) = z(i) / sqrt (x2(i) * y2(i))
         end if
     end do
     !$OMP END PARALLEL DO
-    call sacio_writesac(filez, headz, z, flagz)
 end subroutine sub_crossnorm
 
 real function isum (x, a, b)

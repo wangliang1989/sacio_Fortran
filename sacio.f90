@@ -93,14 +93,14 @@ contains
 !
 !   Description: Read SAC binary header only
 !   Input:
-!       character(len=80) :: filename   filename to be read
+!       character(len:) ,allocatable :: filename   filename to be read
 !   Output:
 !       type(sachead)     :: head       SAC header to be filled
 !       integer           :: flag       Error code
 !
 subroutine sacio_readhead(filename, head, flag)
 implicit none
-character(len=80), intent(in) :: filename
+character(len=:) ,allocatable :: filename
 type(sachead), intent(inout) :: head
 integer, intent(inout) :: flag
 
@@ -141,7 +141,7 @@ end subroutine sacio_readhead
 !
 !   Description: Read SAC binary file
 !   Input:
-!       character(len=80) :: filename   filename to be read
+!       character(len:) ,allocatable :: filename   filename to be read
 !   Output:
 !       type(sachead)     :: head       SAC header to be filled
 !       real, dimension(:):: data       SAC data to be filled
@@ -149,7 +149,7 @@ end subroutine sacio_readhead
 !
 subroutine sacio_readsac(filename, head, data, flag)
 implicit none
-character(len=80), intent(in) :: filename
+character(len=:) ,allocatable :: filename
 real, allocatable, dimension(:), intent(inout) :: data
 type(sachead), intent(inout) :: head
 integer, intent(inout) :: flag
@@ -205,7 +205,7 @@ end subroutine sacio_readsac
 !
 !   Description: Write SAC binary file
 !   Input:
-!       character(len=80) :: filename   filename to be read
+!       character(len:) ,allocatable :: filename   filename to be read
 !       type(sachead)     :: head       SAC header to be written
 !       real, dimension(:):: data       SAC data to be written
 !   Output:
@@ -213,7 +213,7 @@ end subroutine sacio_readsac
 !
 subroutine sacio_writesac(filename, head, data, flag)
 implicit none
-character(len=80), intent(in) :: filename
+character(len=:) ,allocatable :: filename
 real, dimension(:), intent(in) :: data
 type(sachead), intent(in) :: head
 integer, intent(inout) :: flag
@@ -251,7 +251,7 @@ end subroutine sacio_writesac
 !   Description: Read SAC binary file with cut option
 !
 !   Input:
-!       character(len=80) :: filename   filename to be read
+!       character(len:) ,allocatable :: filename   filename to be read
 !       integer           :: tmark      time marker in SAC header
 !                                            -5 -> b;
 !                                            -3 -> o;
@@ -266,7 +266,7 @@ end subroutine sacio_writesac
 !
 subroutine sacio_readsac_cut(filename, head, data, tmark, t0, t1, flag)
 implicit none
-character(len=80), intent(in) :: filename
+character(len=:) ,allocatable :: filename
 type(sachead), intent(inout) :: head
 real, allocatable, dimension(:), intent(inout) :: data
 integer, intent(in) :: tmark
