@@ -44,9 +44,6 @@ subroutine sub_crossnorm(x_in, y_in, z, result, flag)
             m2 = sqrt (x2(i) * y2(i))
             result(i) = z(i) / m2
         end if
-        !if (result(i) >= 1) then
-            write (*,*) z(i), m2, result(i), x2(i), y2(i), i, nx, ny
-        !end if
     end do
     !$OMP END PARALLEL DO
 end subroutine sub_crossnorm
