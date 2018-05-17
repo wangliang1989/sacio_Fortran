@@ -1,12 +1,13 @@
-FC = gfortran -Wall -fopenmp
+FC = gfortran -Wall
 
-MAIN = crossnorm
+all: sacio.mod module_cross.mod module_crossnorm.mod cross crossnorm clean
 
 BIN = ${HOME}/bin
 
-all: sacio.mod module_crossnorm.mod $(MAIN) clean
-
 sacio.mod: sacio.f90
+	$(FC) -c $^
+
+module_cross.mod: module_cross.f90
 	$(FC) -c $^
 
 module_crossnorm.mod: module_crossnorm.f90
@@ -15,7 +16,10 @@ module_crossnorm.mod: module_crossnorm.f90
 %.o: %.f90
 	$(FC) -c $^
 
-$(MAIN): %: %.o sacio.o module_crossnorm.o
+crossnorm: %: %.o sacio.o module_crossnorm.o
+	$(FC) $^ -o $(BIN)/$@
+
+cross: %: %.o sacio.o module_cross.o
 	$(FC) $^ -o $(BIN)/$@
 
 clean:

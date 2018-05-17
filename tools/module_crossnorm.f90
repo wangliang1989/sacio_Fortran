@@ -13,6 +13,7 @@ subroutine sub_crossnorm(x_in, y_in, z, result, flag)
     integer, intent(inout) :: flag
     integer :: i, npts, nx, ny
     real,allocatable,dimension(:) :: x, y, x2, y2
+    real::m2
 
     nx = size(x_in)
     ny = size(y_in)
@@ -38,9 +39,14 @@ subroutine sub_crossnorm(x_in, y_in, z, result, flag)
             x2(i) = isum(x,i-ny+1,nx)
             y2(i) = isum(y,1,nx+ny-i)
         end if
-        if ((abs(x2(i)) > 1e-10) .and. (abs(y2(i)) > 1e-10)) then
-            result(i) = z(i) / sqrt (x2(i) * y2(i))
+        m2 = 0
+        if ((abs(x2(i)) > 0) .and. (abs(y2(i)) > 0)) then
+            m2 = sqrt (x2(i) * y2(i))
+            result(i) = z(i) / m2
         end if
+        !if (result(i) >= 1) then
+            write (*,*) z(i), m2, result(i), x2(i), y2(i), i, nx, ny
+        !end if
     end do
     !$OMP END PARALLEL DO
 end subroutine sub_crossnorm
