@@ -5,28 +5,26 @@ public :: isum
 
 contains
 
-subroutine sub_crossnorm(x_in, y_in, z, result, flag)
+subroutine sub_crossnorm(x, y, z, result, flag)
 
     implicit none
-    real, allocatable, dimension(:), intent(in) :: x_in, y_in, z
+    real, allocatable, dimension(:), intent(in) :: x, y, z
     real, allocatable, dimension(:), intent(out) :: result
     integer, intent(inout) :: flag
     integer :: i, npts, nx, ny
-    real,allocatable,dimension(:) :: x, y, x2, y2
+    real,allocatable,dimension(:) :: x2, y2
     real::m2
 
-    nx = size(x_in)
-    ny = size(y_in)
+    nx = size(x)
+    ny = size(y)
     npts = nx + ny - 1
     if (npts /= size(z)) then
         flag = 1
-        result = 0
     end if
-    x = x_in * x_in
-    y = y_in * y_in
     allocate(x2(1:npts))
     allocate(y2(1:npts))
     allocate(result(1:npts))
+    result = 0
     !$OMP PARALLEL DO
     do i=1, npts
         if ((i >= 1) .and. (i <= ny)) then
@@ -39,14 +37,11 @@ subroutine sub_crossnorm(x_in, y_in, z, result, flag)
             x2(i) = isum(x,i-ny+1,nx)
             y2(i) = isum(y,1,nx+ny-i)
         end if
-        m2 = 0
-        if ((abs(x2(i)) > 0) .and. (abs(y2(i)) > 0)) then
-            m2 = sqrt (x2(i) * y2(i))
+        m2 = sqrt (x2(i) * y2(i))
+        if (m2 > 0) then
             result(i) = z(i) / m2
         end if
-        !if (result(i) >= 1) then
-            write (*,*) z(i), m2, result(i), x2(i), y2(i), i, nx, ny
-        !end if
+        write (*,*) z(i), m2, result(i), x2(i), y2(i), i, nx, ny
     end do
     !$OMP END PARALLEL DO
 end subroutine sub_crossnorm
@@ -59,7 +54,7 @@ real function isum (x, a, b)
     integer :: i
     isum = 0
     do i=a, b
-        isum = isum + x(i)
+        isum = isum + x(i) * x(i)
     end do
 end function isum
 
