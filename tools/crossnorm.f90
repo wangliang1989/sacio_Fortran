@@ -42,11 +42,9 @@ if (headx%npts < heady%npts) then
     write(*,*) "sacio_Fortran: npts in -X file is smaller than -Y file"
 end if
 
-write(*,*) headz%npts
 if (flag == 0) then
     call sub_crossnorm_cut(z, headz, heady%npts, delay, flag)
 end if
-write(*,*) headz%npts
 if (flag == 0) then
     call sub_crossnorm(x, y, z, result, flag)
 end if
