@@ -7,7 +7,7 @@ character(len=1024) :: arg
 character(len=:) ,allocatable :: file, out
 integer :: i, flag
 real,allocatable,dimension(:) :: x, y, z, result
-type(sachead) :: head
+type(sachead) :: headx, heady, headz
 
 do i=1,4
     call get_command_argument(i, arg)
@@ -15,11 +15,11 @@ do i=1,4
     file = arg(3:len(arg))
     select case (arg(1:2))
     case ('-X')
-        call sacio_readsac(file, head, x, flag)
+        call sacio_readsac(file, headx, x, flag)
     case ('-Y')
-        call sacio_readsac(file, head, y, flag)
+        call sacio_readsac(file, heady, y, flag)
     case ('-Z')
-        call sacio_readsac(file, head, z, flag)
+        call sacio_readsac(file, headz, z, flag)
     case ('-O')
         out = file
     case default
@@ -27,12 +27,30 @@ do i=1,4
     end select
 end do
 
+if (headx%delta /= heady%delta) then
+    flag = 1
+    write(*,*) "sacio_Fortran: delta is not equal in -X file and -Y file"
+end if
+if (heady%delta /= headz%delta) then
+    flag = 1
+    write(*,*) "sacio_Fortran: delta is not equal in -Y file and -Z file"
+end if
+if (headx%npts < heady%npts) then
+    flag = 1
+    write(*,*) "sacio_Fortran: npts in -X file is smaller than -Y file"
+end if
+
+write(*,*) headz%npts
+if (flag == 0) then
+    call sub_crossnorm_cut(z, headz, heady%npts, flag)
+end if
+write(*,*) headz%npts
 if (flag == 0) then
     call sub_crossnorm(x, y, z, result, flag)
 end if
 
 if (flag == 0) then
-    call sacio_writesac(out, head, result, flag)
+    call sacio_writesac(out, headz, result, flag)
 end if
 
 end program crossnorm

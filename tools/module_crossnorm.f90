@@ -1,50 +1,59 @@
 module module_crossnorm
 use sacio
 public :: sub_crossnorm
+public :: sub_crossnorm_cut
 public :: isum
 
 contains
 
 subroutine sub_crossnorm(x, y, z, result, flag)
-
     implicit none
     real, allocatable, dimension(:), intent(in) :: x, y, z
     real, allocatable, dimension(:), intent(out) :: result
     integer, intent(inout) :: flag
     integer :: i, npts, nx, ny
-    real,allocatable,dimension(:) :: x2, y2
-    real::m2
+    real:: m2, y2
 
     nx = size(x)
     ny = size(y)
-    npts = nx + ny - 1
+    npts = nx - ny + 1
     if (npts /= size(z)) then
         flag = 1
+        write(*,*)"sacio_fortran: npts wrong", npts, size(z)
     end if
-    allocate(x2(1:npts))
-    allocate(y2(1:npts))
+    y2 = isum (y, 1, ny)
     allocate(result(1:npts))
     result = 0
+    ! -fopenmp
     !$OMP PARALLEL DO
     do i=1, npts
-        if ((i >= 1) .and. (i <= ny)) then
-            x2(i) = isum(x,1,i)
-            y2(i) = isum(y,ny-i+1,ny)
-        else if ((i > ny) .and. (i <= nx)) then
-            x2(i) = isum(x,i-ny+1,i)
-            y2(i) = isum(y,1,ny)
-        else if ((i > nx) .and. (i <= nx + ny - 1)) then
-            x2(i) = isum(x,i-ny+1,nx)
-            y2(i) = isum(y,1,nx+ny-i)
-        end if
-        m2 = sqrt (x2(i) * y2(i))
+        m2 = sqrt (isum(x, i, i + ny - 1) * y2)
         if (m2 > 0) then
             result(i) = z(i) / m2
         end if
-        write (*,*) z(i), m2, result(i), x2(i), y2(i), i, nx, ny
     end do
     !$OMP END PARALLEL DO
 end subroutine sub_crossnorm
+
+subroutine sub_crossnorm_cut(z, headz, npts_y, flag)
+    implicit none
+    real, allocatable, dimension(:), intent(inout) :: z
+    type(sachead), intent(inout) :: headz
+    integer, intent(in) :: npts_y
+    integer, intent(inout) :: flag
+    real, allocatable, dimension(:) :: result
+
+    flag = 0
+    allocate(result(1:(headz%npts - 2 * npts_y + 2)))
+    result = z(npts_y - 1 : headz%npts - npts_y)
+    deallocate(z)
+    z = result
+    deallocate(result)
+
+    headz%b = headz%b + headz%delta * npts_y
+    headz%e = headz%e - headz%delta * npts_y
+    headz%npts = headz%npts - 2 * npts_y
+end subroutine sub_crossnorm_cut
 
 real function isum (x, a, b)
     implicit none
