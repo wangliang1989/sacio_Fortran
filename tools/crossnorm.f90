@@ -5,11 +5,10 @@ implicit none
 character(len=2) :: q
 character(len=1024) :: arg
 character(len=:) ,allocatable :: file, out
-integer :: i, flag, delay
+integer :: i, flag
 real,allocatable,dimension(:) :: x, y, z, result
 type(sachead) :: headx, heady, headz
 
-delay = 0
 do i=1,4
     call get_command_argument(i, arg)
     q = arg(1:2)
@@ -21,8 +20,6 @@ do i=1,4
         call sacio_readsac(file, heady, y, flag)
     case ('-Z')
         call sacio_readsac(file, headz, z, flag)
-    case ('-D')
-        read(file,'(i1)') delay
     case ('-O')
         out = file
     case default
@@ -44,7 +41,7 @@ if (headx%npts < heady%npts) then
 end if
 
 if (flag == 0) then
-    call sub_crossnorm_cut(z, headz, heady%npts, delay, flag)
+    call sub_crossnorm_cut(z, headz, heady%npts, flag)
 end if
 if (flag == 0) then
     call sub_crossnorm(x, y, z, result, flag)

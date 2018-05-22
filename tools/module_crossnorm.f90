@@ -35,23 +35,23 @@ subroutine sub_crossnorm(x, y, z, result, flag)
     !$OMP END PARALLEL DO
 end subroutine sub_crossnorm
 
-subroutine sub_crossnorm_cut(z, headz, npts_y, delay, flag)
+subroutine sub_crossnorm_cut(z, headz, npts_y, flag)
     implicit none
     real, allocatable, dimension(:), intent(inout) :: z
     type(sachead), intent(inout) :: headz
-    integer, intent(in) :: npts_y, delay
+    integer, intent(in) :: npts_y
     integer, intent(inout) :: flag
     real, allocatable, dimension(:) :: result
 
     flag = 0
     allocate(result(1:(headz%npts - 2 * npts_y + 2)))
-    result = z(npts_y - 1 + delay : headz%npts - npts_y + delay)
+    result = z(npts_y - 1 : headz%npts - npts_y)
     deallocate(z)
     z = result
     deallocate(result)
 
-    headz%b = headz%b + headz%delta * (delay + npts_y)
-    headz%e = headz%e - headz%delta * (delay + npts_y)
+    headz%b = headz%b + headz%delta * npts_y
+    headz%e = headz%e - headz%delta * npts_y
     headz%npts = headz%npts - 2 * npts_y
 end subroutine sub_crossnorm_cut
 
