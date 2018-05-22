@@ -9,6 +9,7 @@ integer :: i, flag, delay
 real,allocatable,dimension(:) :: x, y, z, result
 type(sachead) :: headx, heady, headz
 
+delay = 0
 do i=1,4
     call get_command_argument(i, arg)
     q = arg(1:2)
@@ -21,7 +22,7 @@ do i=1,4
     case ('-Z')
         call sacio_readsac(file, headz, z, flag)
     case ('-D')
-        read(delay,"(i2)") file
+        read(file,'(i1)') delay
     case ('-O')
         out = file
     case default
