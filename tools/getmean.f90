@@ -18,7 +18,9 @@ do i=1, size(x)
     sum = sum + x(i)
 end do
 mean = sum / size(x)
-mean = mean / head%depmax
+if (head%depmax > 0) then
+    mean = mean / head%depmax
+end if
 write(*,*) mean
 
 end program crossnorm
