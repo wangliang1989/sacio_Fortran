@@ -1,6 +1,6 @@
 FC = gfortran -Wall
 
-all: sacio.mod module_cross.mod module_crossnorm.mod cross crossnorm clean
+all: sacio.mod module_cross.mod module_crossnorm.mod cross crossnorm getmean clean
 
 BIN = ${HOME}/bin
 
@@ -20,6 +20,9 @@ crossnorm: %: %.o sacio.o module_crossnorm.o
 	$(FC) $^ -o $(BIN)/$@
 
 cross: %: %.o sacio.o module_cross.o
+	$(FC) $^ -o $(BIN)/$@
+
+getmean:  %: %.o sacio.o
 	$(FC) $^ -o $(BIN)/$@
 
 clean:
