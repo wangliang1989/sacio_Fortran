@@ -9,7 +9,7 @@ integer :: i, flag
 real,allocatable,dimension(:) :: x, y, z, result
 type(sachead) :: headx, heady, headz
 
-do i=1,3
+do i=1, command_argument_count()
     call get_command_argument(i, arg)
     q = arg(1:2)
     file = arg(3:len(arg))
