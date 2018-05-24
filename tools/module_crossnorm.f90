@@ -11,8 +11,8 @@ subroutine sub_crossnorm(x, y, z, result, flag)
     real, allocatable, dimension(:), intent(in) :: x, y, z
     real, allocatable, dimension(:), intent(out) :: result
     integer, intent(inout) :: flag
-    integer :: i, npts, nx, ny
-    real:: m2, y2
+    integer :: i, npts, nx, ny,j
+    real:: m2, y2,cor
 
     nx = size(x)
     ny = size(y)
@@ -31,6 +31,11 @@ subroutine sub_crossnorm(x, y, z, result, flag)
         if (m2 > 0) then
             result(i) = z(i) / m2
         end if
+        cor = 0
+        do j=1,ny
+            cor = x(i+j-1)*y(j) + cor
+        end do
+        !write(*,*) i, z(i), m2, result(i), cor, x(i)*y(1),cor/m2
     end do
     !$OMP END PARALLEL DO
 end subroutine sub_crossnorm
