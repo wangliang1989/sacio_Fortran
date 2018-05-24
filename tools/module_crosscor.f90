@@ -29,6 +29,8 @@ subroutine sub_crosscor(x, y, result, flag)
             do j=1, ny
                 cor = x(i+j-1)*y(j) + cor
             end do
+            x2 = 1
+            y2 = 1
             result(i) = cor / sqrt (x2 * y2)
         end if
         !write(*,*) i, m2, result(i), cor, x(i)*y(1),cor/m2
