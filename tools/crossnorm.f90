@@ -18,7 +18,7 @@ do i=1,3
         call sacio_readsac(file, headx, x, flag)
     case ('-Y')
         call sacio_readsac(file, heady, y, flag)
-    case ('-z')
+    case ('-Z')
         call sacio_readsac(file, headz, z, flag)
     case ('-O')
         out = file
